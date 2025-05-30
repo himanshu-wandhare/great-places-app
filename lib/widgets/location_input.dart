@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
 import 'package:native_features/models/place.dart';
@@ -23,7 +24,7 @@ class _LocationInputState extends State<LocationInput> {
     final lat = _pickedLocation!.latitude;
     final lon = _pickedLocation!.longitude;
 
-    return "https://staticmap.openstreetmap.de/staticmap.php?center=$lat,$lon&zoom=13&size=600x300&markers=$lat,$lon,red";
+    return "https://maps.geoapify.com/v1/staticmap?style=osm-bright&width=600&height=300&center=lonlat:$lon,$lat&zoom=13&marker=lonlat:$lon,$lat;color:%23ff0000;size:42;text:1&apiKey=${dotenv.env['GEOAPIFY_KEY']}";
   }
 
   void _getCurrentLocation() async {
