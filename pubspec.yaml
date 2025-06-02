@@ -42,6 +42,10 @@ dependencies:
     location: ^8.0.0
     http: ^1.4.0
     flutter_dotenv: ^5.2.1
+    flutter_map: ^8.1.1
+    latlong2: ^0.9.1
+    path_provider: ^2.1.5
+    path: ^1.9.1
 
 dev_dependencies:
     flutter_test:

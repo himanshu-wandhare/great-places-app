@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:native_features/models/place.dart';
+import 'package:native_features/screens/map.dart';
 
 class LocationInput extends StatefulWidget {
   const LocationInput({super.key, required this.onSelectLocation});
@@ -58,8 +60,22 @@ class _LocationInputState extends State<LocationInput> {
 
     if (lat == null || lon == null) return;
 
+    _fetchLocation(lat, lon);
+  }
+
+  Future<void> _selectLocationOnMap() async {
+    final location = await Navigator.of(
+      context,
+    ).push<LatLng>(MaterialPageRoute(builder: (ctx) => const MapScreen()));
+
+    if (location == null) return;
+
+    _fetchLocation(location.latitude, location.longitude);
+  }
+
+  Future<void> _fetchLocation(double latitude, double longitude) async {
     final url = Uri.parse(
-      "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=$lat&lon=$lon",
+      "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=$latitude&lon=$longitude",
     );
 
     final response = await http.get(
@@ -73,8 +89,8 @@ class _LocationInputState extends State<LocationInput> {
 
     setState(() {
       _pickedLocation = PlaceLocation(
-        latitude: lat,
-        longitude: lon,
+        latitude: latitude,
+        longitude: longitude,
         address: resData['display_name'],
       );
       _isGettingLocation = false;
@@ -132,7 +148,7 @@ class _LocationInputState extends State<LocationInput> {
               icon: Icon(Icons.location_on),
             ),
             TextButton.icon(
-              onPressed: () {},
+              onPressed: _selectLocationOnMap,
               label: const Text("Select on Map"),
               icon: Icon(Icons.map),
             ),
