@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:native_features/models/place.dart';
@@ -15,7 +17,7 @@ class AddPlace extends ConsumerStatefulWidget {
 class _AddPlaceState extends ConsumerState<AddPlace> {
   final _formKey = GlobalKey<FormState>();
   String _title = "";
-  String _imagePath = "";
+  File? _image;
   PlaceLocation? _selectedLocation;
 
   String? _validator(String? value) {
@@ -29,11 +31,13 @@ class _AddPlaceState extends ConsumerState<AddPlace> {
     final formCurrentState = _formKey.currentState;
 
     if (formCurrentState?.validate() ?? false) {
-      if (_imagePath.isEmpty || _selectedLocation == null) return;
+      if (_image == null || _selectedLocation == null) return;
       formCurrentState?.save();
+
       ref
           .read(placesProvider.notifier)
-          .addPlace(_title, _imagePath, _selectedLocation!);
+          .addPlace(_title, _image!, _selectedLocation!);
+
       Navigator.of(context).pop();
     }
   }
@@ -59,7 +63,7 @@ class _AddPlaceState extends ConsumerState<AddPlace> {
                 onSaved: (newValue) => _title = newValue!.trim(),
               ),
               const SizedBox(height: 10),
-              ImageInput(onCapturePicture: (file) => _imagePath = file),
+              ImageInput(onCapturePicture: (file) => _image = file),
               const SizedBox(height: 10),
               LocationInput(
                 onSelectLocation: (location) => _selectedLocation = location,

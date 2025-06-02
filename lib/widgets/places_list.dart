@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:native_features/models/place.dart';
 import 'package:native_features/screens/place_details.dart';
@@ -31,10 +28,7 @@ class PlacesList extends StatelessWidget {
               tag: places[index].id,
               child: CircleAvatar(
                 radius: 26,
-                backgroundImage:
-                    kIsWeb
-                        ? NetworkImage(places[index].imagePath)
-                        : FileImage(File(places[index].imagePath)),
+                backgroundImage: FileImage(places[index].image),
               ),
             ),
             title: Text(

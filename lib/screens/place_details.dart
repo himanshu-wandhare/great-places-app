@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:native_features/models/place.dart';
@@ -25,11 +22,8 @@ class PlaceDetails extends StatelessWidget {
         children: [
           Hero(
             tag: place.id,
-            child: Image(
-              image:
-                  kIsWeb
-                      ? NetworkImage(place.imagePath)
-                      : FileImage(File(place.imagePath)),
+            child: Image.file(
+              place.image,
               fit: BoxFit.cover,
               width: double.infinity,
               height: double.infinity,
